@@ -1,0 +1,107 @@
+server:
+  port: 9000
+  netty:
+    connection-timeout: 2s
+    idle-timeout: 15s
+  shutdown: graceful
+
+logging:
+  level:
+    org.springframework.web: DEBUG
+    io.github.resilience4j: DEBUG
+
+
+spring:
+  application:
+    name: edge-service
+  lifecycle:
+    timeout-per-shutdown-phase: 15s
+  cloud:
+    gateway:
+      default-filters:
+        - name: Retry
+          args:
+            retries: 3
+            methods: GET
+            series: SERVER_ERROR
+            exceptions: java.io.IOException, java.util.concurrent.TimeoutException
+            backoff:
+              firstBackoff: 50ms
+              maxBackOff: 500ms
+              factor: 2
+              basedOnPreviousValue: false
+      httpclient:
+        connect-timeout: 2000
+        response-timeout: 5s
+        pool:
+          type: elastic
+          max-idle-time: 15s
+          max-life-time: 60s
+      routes:
+#        - id: admin-route
+#          uri: ${ADMIN_SERVICE_URL:http://localhost:7001}/admin
+#          predicates:
+#            - Path=/admin/**
+#          filters:
+#            - name: PreGatewayFilter
+#            - name: CircuitBreaker
+#              args:
+#                name: adminCircuitBreaker
+        - id: auth-route
+          uri: ${AUTH_SERVICE_URL:http://localhost:7010}/
+          predicates:
+            - Path=/auth/**, /oauth2/**,/logout/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: authCircuitBreaker
+        - id: news-list-route
+          uri: ${NEWS_SERVICE_URL:http://localhost:7710}/news
+          predicates:
+            - Path=/news/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: newsCircuitBreaker
+        - id: menu-route
+          uri: ${menu_SERVICE_URL:http://localhost:7001}/menu
+          predicates:
+            - Path=/menu/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: menuCircuitBreaker
+        - id: select-route
+          uri: ${NEWS_SERVICE_URL:http://localhost:7001}/
+          predicates:
+            - Path=/select/**,/cart/**, /admin/**,/menu/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: selectCircuitBreaker
+        - id: cart-route
+          uri: ${NEWS_SERVICE_URL:http://localhost:7001}/cart
+          predicates:
+            - Path=/cart/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: cartCircuitBreaker
+
+
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        sliding-window-size: 20
+        permitted-number-of-calls-in-half-open-state: 5
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 15000
+  timelimiter:
+    configs:
+      default:
+        timeout-duration: 5s
+
+polar:
+  auth-service-url: ${AUTH_SERVICE_URL:http://localhost:7010}/auths
