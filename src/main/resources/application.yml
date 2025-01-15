@@ -47,7 +47,7 @@ spring:
 #            - name: CircuitBreaker
 #              args:
 #                name: adminCircuitBreaker
-        - id: auth-route
+        - id: login-route
           uri: ${AUTH_SERVICE_URL:http://localhost:7010}/
           predicates:
             - Path=/auth/**, /oauth2/**,/logout/**
@@ -72,22 +72,45 @@ spring:
               args:
                 name: menuCircuitBreaker
         - id: select-route
-          uri: ${NEWS_SERVICE_URL:http://localhost:7001}/
+          uri: ${SELECT_SERVICE_URL:http://localhost:7001}/
           predicates:
-            - Path=/select/**,/cart/**, /admin/**,/menu/**
+            - Path=/select/**
           filters:
             - name: CircuitBreaker
               args:
                 name: selectCircuitBreaker
         - id: cart-route
-          uri: ${NEWS_SERVICE_URL:http://localhost:7001}/cart
+          uri: ${SELECT_SERVICE_URL:http://localhost:7001}/cart
           predicates:
             - Path=/cart/**
           filters:
             - name: CircuitBreaker
               args:
                 name: cartCircuitBreaker
-
+        - id: delivery-route
+          uri: ${DELIVERY_SERVICE_URL:http://localhost:7770}/
+          predicates:
+            - Path=/chat/**,/order/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: cartCircuitBreaker
+        - id: cart-route
+          uri: ${SELECT_SERVICE_URL:http://localhost:7001}/admin
+          predicates:
+            - Path=/admin/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: cartCircuitBreaker
+        - id: file-route
+          uri: ${SELECT_SERVICE_URL:http://localhost:7001}/admin
+          predicates:
+            - Path=/admin/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: cartCircuitBreaker
 
 
 resilience4j:

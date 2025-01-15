@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: edge-service
+  labels:
+    app: edge-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: edge-service
+  template:
+    metadata:
+      labels:
+        app: edge-service
+    spec:
+      containers:
+        - name: edge-service
+          image: 879381276515.dkr.ecr.ap-northeast-2.amazonaws.com/edge-service:latest
+          imagePullPolicy: Always
+          command: ["java", "-jar", "app.jar"] # 컨테이너 시작 명령 추가
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "sh", "-c", "sleep 5" ]
+          ports:
+            - containerPort: 9000
+          env:
+            - name: AUTH_SERVICE_URL
+              value: http://login-service:80
+            - name: NEWS_SERVICE_URL
+              value: http://news-service:80
+            - name: menu_SERVICE_URL
+              value: http://select-service:80
+            - name: ORDER_SERVICE_URL
+              value: http://order-service:80
+            - name: DELIVERY_SERVICE_URL
+              value: http://delivery-service:80
+            - name: SELECT_SERVICE_URL
+              value: http://select-service:80
