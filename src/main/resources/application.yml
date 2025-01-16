@@ -104,9 +104,9 @@ spring:
               args:
                 name: cartCircuitBreaker
         - id: file-route
-          uri: ${SELECT_SERVICE_URL:http://localhost:7001}/admin
+          uri: ${FILE_SERVICE_URL:http://localhost:7001}/file
           predicates:
-            - Path=/admin/**
+            - Path=/file/**
           filters:
             - name: CircuitBreaker
               args:
