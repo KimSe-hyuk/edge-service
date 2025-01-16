@@ -38,3 +38,5 @@ spec:
               value: http://delivery-service:80
             - name: SELECT_SERVICE_URL
               value: http://select-service:80
+            - name: FRONT_SERVICE_URL
+              value: http://ac0ad514955bc4921a4b14aa1ef3f4d6-213107948.ap-northeast-2.elb.amazonaws.com

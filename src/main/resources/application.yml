@@ -50,9 +50,7 @@ spring:
         - id: login-route
           uri: ${AUTH_SERVICE_URL:http://localhost:7010}/
           predicates:
-            - Path=/auth/**
-            - Path=/oauth2/**
-            - Path=/logout/**
+            - Path=/auth/**, /oauth2/**,/logout/**
           filters:
             - name: CircuitBreaker
               args:
@@ -92,8 +90,7 @@ spring:
         - id: delivery-route
           uri: ${DELIVERY_SERVICE_URL:http://localhost:7770}/
           predicates:
-            - Path=/chat/**
-            - Path=/order/**
+            - Path=/chat/**,/order/**
           filters:
             - name: CircuitBreaker
               args:
