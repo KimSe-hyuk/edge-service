@@ -30,7 +30,7 @@ jobs:
       # 4. Configure kubectl (Kubeconfig 설정)
       - name: Configure kubectl
         run: |
-          aws eks update-kubeconfig --region ap-northeast-2 --name polar-kim
+          aws eks update-kubeconfig --region ap-northeast-2 --name polar
 
       # 5. ECR 로그인
       - name: Login to Amazon ECR

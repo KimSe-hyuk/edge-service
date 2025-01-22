@@ -104,13 +104,29 @@ spring:
               args:
                 name: cartCircuitBreaker
         - id: file-route
-          uri: ${FILE_SERVICE_URL:http://localhost:7001}/file
+          uri: ${FILE_SERVICE_URL:http://localhost:7013}/selectImage
           predicates:
-            - Path=/file/**
+            - Path=/selectImage/**
           filters:
             - name: CircuitBreaker
               args:
                 name: cartCircuitBreaker
+        - id: payment-route
+          uri: ${PAYMENT_SERVICE_URL:http://localhost:7011}/payment
+          predicates:
+            - Path=/payment/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: paymentCircuitBreaker
+        - id: checkUser-route
+          uri: ${CHECK_USER_SERVICE_URL:http://localhost:7011}/checkUser
+          predicates:
+            - Path=/checkUser/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: checkUserCircuitBreaker
 
 
 resilience4j:

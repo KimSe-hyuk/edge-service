@@ -40,3 +40,9 @@ spec:
               value: http://select-service:80
             - name: FRONT_SERVICE_URL
               value: http://ac0ad514955bc4921a4b14aa1ef3f4d6-213107948.ap-northeast-2.elb.amazonaws.com
+            - name: PAYMENT_SERVICE_URL
+              value: http://payment-service:80
+            - name: CHECK_USER_SERVICE_URL
+              value: http://check-user-service:80
+            - name: FILE_SERVICE_URL
+              value: http://file-service:80
