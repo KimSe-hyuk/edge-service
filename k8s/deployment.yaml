@@ -30,6 +30,8 @@ spec:
               value: http://login-service:80
             - name: NEWS_SERVICE_URL
               value: http://news-service:80
+            - name: REVIEW_SERVICE_URL
+              value: http://review-service:80
             - name: menu_SERVICE_URL
               value: http://select-service:80
             - name: ORDER_SERVICE_URL

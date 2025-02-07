@@ -63,8 +63,16 @@ spring:
             - name: CircuitBreaker
               args:
                 name: newsCircuitBreaker
+        - id: review-list-route
+          uri: ${REVIEW_SERVICE_URL:http://localhost:7711}/review
+          predicates:
+            - Path=/review/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: reviewCircuitBreaker
         - id: menu-route
-          uri: ${menu_SERVICE_URL:http://localhost:7001}/menu
+          uri: ${MENU_SERVICE_URL:http://localhost:7001}/menu
           predicates:
             - Path=/menu/**
           filters:
@@ -90,12 +98,12 @@ spring:
         - id: delivery-route
           uri: ${DELIVERY_SERVICE_URL:http://localhost:7770}/
           predicates:
-            - Path=/chat/**,/order/**
+            - Path=/chat/**,/order/**,/location/**
           filters:
             - name: CircuitBreaker
               args:
-                name: cartCircuitBreaker
-        - id: cart-route
+                name: chatCircuitBreaker
+        - id: admin-route
           uri: ${SELECT_SERVICE_URL:http://localhost:7001}/admin
           predicates:
             - Path=/admin/**
