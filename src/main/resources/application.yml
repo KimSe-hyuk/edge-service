@@ -148,7 +148,7 @@ resilience4j:
   timelimiter:
     configs:
       default:
-        timeout-duration: 5s
+        timeout-duration: 10s
 
 polar:
   auth-service-url: ${AUTH_SERVICE_URL:http://localhost:7010}/auths
